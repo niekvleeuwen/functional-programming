@@ -1,3 +1,24 @@
+{-|
+Module : Opdracht1
+Omschrijving : Opdracht 1
+Inleverpoging : Eerste kans
+Student naam : Niek van Leeuwen,Jordy van Essen
+Nummer : 0967267,0968981
+Klas : TI2C
+-}
+
+module Opdracht1
+    where
+
+faca :: Int -> Int 
+faca 0 = 1 
+faca n = n * faca(n - 1) 
+
+facb :: Int -> Int
+facb n | n < 0 = -1
+       | n == 0 = 1 
+       | n /= 0 = n * facb(n-1) 
+
 --
 -- ((-b) +/- sqrt(b^2 - 4ac)) / 2a
 --
@@ -22,8 +43,13 @@ worpena = [(x,y,z)|x<-[1..6],y<-[1..6],z<-[1..6],((x+y+z) `mod` 5) == 0]
 worpenb:: Int -> [(Int,Int,Int)]
 worpenb n = [(x,y,z)|x<-[1..6],y<-[1..6],z<-[1..6],((x+y+z) `mod` n) == 0]
 
-main = do
-    print(nulpuntena 1 4 4) -- Result is [-2.0, -2.0]
-    print(nulpuntenb 1 4 4) -- Result is [-2.0, -2.0]
-    print(worpena)
-    print(worpenb 7)
+main = do 
+   putStrLn "De faculteit van 10 is:" 
+   print(faca 10)
+   putStrLn "De faculteit van 20 is:" 
+   print(facb 20)
+   print(facb (-5))
+   print(nulpuntena 1 4 4) -- Result is [-2.0, -2.0]
+   print(nulpuntenb 1 4 4) -- Result is [-2.0, -2.0]
+   print(worpena)
+   print(worpenb 7)
