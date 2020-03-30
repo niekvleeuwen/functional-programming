@@ -12,13 +12,13 @@ module Opdracht2
 
 import Data.Char
 
--- 1A
+-- 1A Bereken de grootste gemenen deler van twee natuurlijke getallen
 euclid::Integer -> Integer -> Integer 
 euclid x y
         | y == 0 = x
         | otherwise = euclid y (x `mod` y)
 
--- 1B
+-- 1B e * d = 1(mod m)
 egcd::Integer->Integer->[Integer]
 egcd 0 b = [b, 0, 1]
 egcd a b =
@@ -59,7 +59,7 @@ decryptChar (key, m) x = chr(fromIntegral(rsa (key, m)  x))
 {-
     Opdracht 5
 
-	Bob geeft zijn public key aan Alice. Alice versleutelt haar bericht met de private key. Daarna versleutelt ze het bericht met zijn public key. Nu wordt het bericht verstuurd naar Bob. Hij kan nu het bericht met zijn private key ontsleutelen en daarna de volgende laag met ontsleutelen met de public key van Alice. Zo kunnen Alice en Bob dus veilig communiceren met elkaar.
+    Bob geeft zijn public key aan Alice. Alice versleutelt haar bericht met haar private key. Daarna versleutelt ze het bericht met bob zijn public key. Nu wordt het bericht verstuurd naar Bob. Hij kan nu het bericht met zijn private key ontsleutelen en daarna de volgende laag ontsleutelen met de public key van Alice. Zo kunnen Alice en Bob dus veilig communiceren met elkaar.
 -}
 
 main = do 
