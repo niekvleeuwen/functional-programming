@@ -13,41 +13,26 @@ module Opdracht3
 import Data.List
 import Data.Char
  
-func::Double->Double
-func x = x^2 + 2*x
- 
+voorbeeldfunctie::Double->Double
+voorbeeldfunctie x = x^2 + 2*x
+
+-- 1A Differentieer functie f op x=p met precisie p
 differentieer::(Double->Double)->Double->Double->Double
-differentieer f x p = ((f (x+p)) - (f (x))) / p
+differentieer f p x = ((f (x+p)) - (f (x))) / p
  
-integral::(Double->Double)->Double->Double->Double->Double
-integral f a b p
-    | a < b  = ((f(a+(p/2))*p) + integral f (a+p) b p)
+-- 1B Integreer functie f op interval a,b met precisie p
+integreer::(Double->Double)->Double->Double->Double->Double
+integreer f a b p
+    | a < b  = ((f(a+(p/2))*p) + integreer f (a+p) b p)
     | a >= b = (f(a+(p/2))*p)
-   
-dubbelen::(Ord a) => [a]->[a]
+
+-- 2 Return alle elementen die meer dan een keer voorkomen
+dubbelen::(Eq a) => [a]->[a]
 dubbelen s = nub $ s \\ nub s
- 
-s = [1..6]
-stenen = [[a,b,c,d,e]|a<-s,b<-s,c<-s,d<-s,e<-s]
- 
-count::Integer->[Integer]->Integer
-count c [] = 0
-count c (x:xs)
-    | c==x= 1 + (count c xs)
-    | otherwise = count c xs
-   
-convert::[Integer]->[[Integer]]
-convert list = [sort [a,b,c,d,e,f],list] where
-    a = count 1 list
-    b = count 2 list
-    c = count 3 list
-    d = count 4 list
-    e = count 5 list
-    f = count 6 list
-   
--- Gebruik deze functie voor de kans van mogelijke uitkomst.
-chance::[Integer]
-chance = [a,b,c,d,e,f,g,h] where
+
+-- 3 Return een lijst met kansen op alle uitkomsten van het gegeven pokerspel 
+calculatechances::[Integer]
+calculatechances = [a,b,c,d,e,f,g,h] where
     list = poker stenen
     a = count 7 list
     b = count 6 list
@@ -56,27 +41,57 @@ chance = [a,b,c,d,e,f,g,h] where
     e = count 3 list
     f = count 2 list
     g = count 1 list
-    h = count 0 list
-   
+    h = count 0 list 
+
 poker::[[Integer]]->[Integer]
 poker [[]]    = error "List is empty!"
-poker [a] = [hands (convert a)]
-poker (x:xs)  = [hands (convert x)] ++ (poker xs)
+poker [a] = [uitkomsten (convert a)]
+poker (x:xs)  = [uitkomsten (convert x)] ++ (poker xs)
    
-   
-hands::[[Integer]]->Integer
-hands list
-    | (list!!0)==[0,0,0,0,0,5] = 7
-    | (list!!0)==[0,0,0,0,1,4] = 6
-    | (list!!0)==[0,0,0,1,1,3] = 5
-    | (list!!0)==[0,0,0,0,2,3] = 4
-    | (list!!0)==[0,0,0,1,2,2] = 3
-    | (list!!0)==[0,0,1,1,1,2] = 2
-    | (list!!0)==[0,1,1,1,1,1] = (straight (list!!1))
-    | otherwise                = 0
+uitkomsten::[[Integer]]->Integer
+uitkomsten list
+    | (list!!0)==[0,0,0,0,0,5] = 7 -- Poker
+    | (list!!0)==[0,0,0,0,1,4] = 6 -- Four of a kind
+    | (list!!0)==[0,0,0,1,1,3] = 5 -- Three of a kind
+    | (list!!0)==[0,0,0,0,2,3] = 4 -- Full house
+    | (list!!0)==[0,0,0,1,2,2] = 3 -- Two pair
+    | (list!!0)==[0,0,1,1,1,2] = 2 -- One pair
+    | (list!!0)==[0,1,1,1,1,1] = (straight (list!!1)) -- Straight
+    | otherwise                = 0 -- Bust
  
 straight::[Integer]->Integer
 straight list
     | list==[1,2,3,4,5] = 1
     | list==[2,3,4,5,6] = 1
     | otherwise         = 0
+
+-- De lijst met lijsten van iedere worp bouwen:
+s = [1..6]
+stenen = [[a,b,c,d,e]|a<-s,b<-s,c<-s,d<-s,e<-s]
+ 
+-- Onderstaande functie retourneert het aantal voorkomens vancin een lijst:
+count::Integer->[Integer]->Integer
+count c [] = 0
+count c (x:xs)
+    | c==x= 1 + (count c xs)
+    | otherwise = count c xs
+
+-- Onderstaande functie converteert een lijst in een aantal tuples met voorkomens
+convert::[Integer]->[[Integer]]
+convert list = [sort [a,b,c,d,e,f],list] where
+    a = count 1 list
+    b = count 2 list
+    c = count 3 list
+    d = count 4 list
+    e = count 5 list
+    f = count 6 list
+
+main = do 
+    putStrLn "Differentier x^2 + 2x op x = 0:" 
+    print(differentieer voorbeeldfunctie (1/100000) 0)
+    putStrLn "Integreer x^2 + 2x op interval(0,5):" 
+    print(integreer voorbeeldfunctie 0 5 (1/100000))
+    putStrLn "Geef alle elementen die meer dan een keer voorkomen:"
+    print(dubbelen "aabbbcdeeeef")
+    putStrLn "De kansen van alle uitkomsten van het gegeven pokerspel:"
+    print(calculatechances)
