@@ -44,7 +44,6 @@ calculatechances = [a,b,c,d,e,f,g,h] where
     h = count 0 list 
 
 poker::[[Integer]]->[Integer]
-poker [[]]    = error "List is empty!"
 poker [a] = [uitkomsten (convert a)]
 poker (x:xs)  = [uitkomsten (convert x)] ++ (poker xs)
    
@@ -59,6 +58,7 @@ uitkomsten list
     | (list!!0)==[0,1,1,1,1,1] = (straight (list!!1)) -- Straight
     | otherwise                = 0 -- Bust
  
+-- Deze functie checkt of een gegeven list een straight bevat
 straight::[Integer]->Integer
 straight list
     | list==[1,2,3,4,5] = 1
@@ -69,7 +69,7 @@ straight list
 s = [1..6]
 stenen = [[a,b,c,d,e]|a<-s,b<-s,c<-s,d<-s,e<-s]
  
--- Onderstaande functie retourneert het aantal voorkomens vancin een lijst:
+-- Onderstaande functie retourneert het aantal voorkomens van c in een lijst:
 count::Integer->[Integer]->Integer
 count c [] = 0
 count c (x:xs)
